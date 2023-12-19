@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import { useNavigation } from 'react-router-dom';
 
 const MainBtn = ({ formBtn, defaultBtn, defaultBtnLabel }) => {

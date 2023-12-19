@@ -14,6 +14,9 @@ import {
   Admin,
   EditJob,
 } from './pages';
+import { darkThemeStorage } from './utils/darkTheme';
+
+darkThemeStorage();
 
 const router = createBrowserRouter([
   {
