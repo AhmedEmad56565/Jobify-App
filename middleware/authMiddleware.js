@@ -11,14 +11,14 @@ export const protect = async (req, res, next) => {
     const userFound = await User.findById(userId).select('-password');
     if (!userFound) {
       return next(
-        new AppError('Not authorized, token failed!', StatusCodes.UNAUTHORIZED)
+        new AppError('Not authorized, token failed!', StatusCodes.FORBIDDEN)
       );
     }
     req.user = userFound;
     next();
   } else {
     return next(
-      new AppError('Not authorized, no token!', StatusCodes.UNAUTHORIZED)
+      new AppError('Not authorized, no token!', StatusCodes.FORBIDDEN)
     );
   }
 };
@@ -27,6 +27,6 @@ export const admin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    next(new AppError('Not authorized as admin!', StatusCodes.UNAUTHORIZED));
+    next(new AppError('Not authorized as admin!', StatusCodes.FORBIDDEN));
   }
 };

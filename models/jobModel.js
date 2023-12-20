@@ -6,7 +6,6 @@ const jobSchema = new mongoose.Schema(
     company: {
       type: String,
       required: [true, 'company field can not be empty!'],
-      minLength: [3, 'company field can not be less than 3 characters!'],
       maxLength: [20, 'company field can not be more than 20 characters!'],
       trim: true,
     },
@@ -14,7 +13,6 @@ const jobSchema = new mongoose.Schema(
     position: {
       type: String,
       required: [true, 'position field can not be empty!'],
-      minLength: [8, 'position field can not be less than 8 characters!'],
       maxLength: [20, 'position field can not be more than 20 characters!'],
       trim: true,
     },
@@ -42,7 +40,6 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: [true, 'job location field can not be empty!'],
       default: 'my city',
-      minLength: [4, 'job location field can not be less than 4 characters!'],
       maxLength: [20, 'job location field can not be more than 20 characters!'],
       trim: true,
     },
