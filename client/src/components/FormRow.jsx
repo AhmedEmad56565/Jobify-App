@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const FormRow = ({ type, name, labelText, defaultValue }) => {
   return (
     <div className='form-row'>

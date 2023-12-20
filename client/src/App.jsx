@@ -16,6 +16,11 @@ import {
 } from './pages';
 import { darkThemeStorage } from './utils/darkTheme';
 
+import { action as registerAction } from './pages/Register';
+import { action as loginAction } from './pages/Login';
+import { action as addJobAction } from './pages/AddJob';
+import { loader as dashboardLoader } from './pages/DashboardLayout';
+
 darkThemeStorage();
 
 const router = createBrowserRouter([
@@ -31,18 +36,22 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+        action: registerAction,
       },
       {
         path: 'login',
         element: <Login />,
+        action: loginAction,
       },
       {
         path: 'dashboard',
         element: <DashboardLayout />,
+        loader: dashboardLoader,
         children: [
           {
             index: true,
             element: <AddJob />,
+            action: addJobAction,
           },
           {
             path: 'stats',

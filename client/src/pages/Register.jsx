@@ -1,24 +1,40 @@
-import { Link } from 'react-router-dom';
+import { Form, redirect, Link } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { Logo, FormRow, MainBtn } from '../components';
+import customFetch from '../utils/customFetch';
+import { toast } from 'react-toastify';
+
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+
+  try {
+    await customFetch.post('/auth/register', data);
+    toast.success('Registration Successful.');
+    return redirect('/login');
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+    return error;
+  }
+};
 
 const Register = () => {
   return (
     <Wrapper>
-      <form className='form'>
+      <Form method='POST' className='form'>
         <Logo />
         <h4>Register</h4>
 
-        <FormRow type='text' name='name' defaultValue='john' />
+        <FormRow type='text' name='name' defaultValue='Ahmed' />
         <FormRow
           type='text'
           name='lastName'
           labelText='last name'
-          defaultValue='smith'
+          defaultValue='Emad'
         />
-        <FormRow type='text' name='location' defaultValue='earth' />
-        <FormRow type='email' name='email' defaultValue='john@gmail.com' />
-        <FormRow type='password' name='password' defaultValue='secret123' />
+        <FormRow type='text' name='location' defaultValue='Egypt' />
+        <FormRow type='email' name='email' defaultValue='ahmed@gmail.com' />
+        <FormRow type='password' name='password' defaultValue='test102030' />
 
         <MainBtn />
 
@@ -28,7 +44,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-      </form>
+      </Form>
     </Wrapper>
   );
 };

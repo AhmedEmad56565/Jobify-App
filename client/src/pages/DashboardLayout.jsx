@@ -1,15 +1,26 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Dashboard';
-import SmallSidebar from '../components/SmallSidebar';
-import BigSidebar from '../components/BigSidebar';
-import Navbar from '../components/Navbar';
+import { SmallSidebar, BigSidebar, Navbar } from '../components';
 import DashboardContext from '../context/dashBoard';
 import { darkThemeStorage } from '../utils/darkTheme';
+import customFetch from '../utils/customFetch';
+import { toast } from 'react-toastify';
+
+export const loader = async () => {
+  try {
+    const { data } = await customFetch('/users/current-user');
+    return data;
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+    return redirect('/');
+  }
+};
 
 const DashboardLayout = () => {
-  const user = { name: 'john' };
+  const navigate = useNavigate();
+  const user = useLoaderData();
 
   const [showSidebar, setShowSidebar] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(darkThemeStorage());
@@ -25,8 +36,10 @@ const DashboardLayout = () => {
     setShowSidebar((prevSidebarState) => !prevSidebarState);
   }
 
-  function logout() {
-    console.log('logout user');
+  async function logout() {
+    navigate('/');
+    await customFetch.post('/auth/logout', {});
+    toast.success('Logging out...');
   }
 
   return (
@@ -47,7 +60,7 @@ const DashboardLayout = () => {
           <div>
             <Navbar />
             <div className='dashboard-page'>
-              <Outlet />
+              <Outlet context={{ user }} />
             </div>
           </div>
         </main>

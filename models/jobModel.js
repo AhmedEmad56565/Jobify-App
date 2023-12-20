@@ -10,13 +10,15 @@ const jobSchema = new mongoose.Schema(
       maxLength: [20, 'company field can not be more than 20 characters!'],
       trim: true,
     },
+
     position: {
       type: String,
       required: [true, 'position field can not be empty!'],
-      minLength: [8, 'company field can not be less than 8 characters!'],
-      maxLength: [20, 'company field can not be more than 20 characters!'],
+      minLength: [8, 'position field can not be less than 8 characters!'],
+      maxLength: [20, 'position field can not be more than 20 characters!'],
       trim: true,
     },
+
     jobStatus: {
       type: String,
       enum: {
@@ -25,6 +27,7 @@ const jobSchema = new mongoose.Schema(
       },
       default: JOB_STATUS.PENDING,
     },
+
     jobType: {
       type: String,
       enum: {
@@ -34,19 +37,21 @@ const jobSchema = new mongoose.Schema(
       },
       default: JOB_TYPE.FULL_TIME,
     },
+
     jobLocation: {
       type: String,
-      // required: [true, 'job location field can not be empty!'],
+      required: [true, 'job location field can not be empty!'],
       default: 'my city',
       minLength: [4, 'job location field can not be less than 4 characters!'],
       maxLength: [20, 'job location field can not be more than 20 characters!'],
       trim: true,
     },
-    //   createdBy: {
-    //     type: mongoose.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true,
-    //   },
+
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'job createdBy field can not be empty!'],
+    },
   },
   {
     timestamps: true,

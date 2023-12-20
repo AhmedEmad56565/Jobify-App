@@ -23,7 +23,7 @@ export const getJob = async (req, res, next) => {
 // @route   POST /api/v1/jobs
 // @access  private
 export const createJob = async (req, res, next) => {
-  const job = await Job.create(req.body);
+  const job = await Job.create({ createdBy: req.user._id, ...req.body });
 
   if (!job) {
     return next(new AppError('Error creating job!', StatusCodes.BAD_REQUEST));
@@ -48,4 +48,12 @@ export const deleteJob = async (req, res, next) => {
   res
     .status(StatusCodes.OK)
     .json({ msg: 'Job deleted successfully.', deletedJob });
+};
+
+// @desc    fetch users jobs
+// @route   GET /api/v1/jobs/my-jobs
+// @access  private
+export const getMyJobs = async (req, res, next) => {
+  const jobs = await Job.find({ createdBy: req.user._id });
+  res.status(StatusCodes.OK).json(jobs);
 };

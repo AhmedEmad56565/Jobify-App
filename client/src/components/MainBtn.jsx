@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-// import { useNavigation } from 'react-router-dom';
+import { useNavigation } from 'react-router-dom';
 
 const MainBtn = ({ formBtn, defaultBtn, defaultBtnLabel }) => {
-  // const navigation = useNavigation();
-  // const isSubmitting = navigation.state === 'submitting';
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
 
   if (defaultBtn) {
     return (
@@ -14,9 +14,12 @@ const MainBtn = ({ formBtn, defaultBtn, defaultBtnLabel }) => {
   }
 
   return (
-    <button type='submit' className={`btn btn-block`}>
-      {/* {isSubmitting ? 'submitting...' : 'submit'} */}
-      submit
+    <button
+      type='submit'
+      className={`btn btn-block ${formBtn ? 'form-btn' : ''}`}
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? 'submitting...' : 'submit'}
     </button>
   );
 };
