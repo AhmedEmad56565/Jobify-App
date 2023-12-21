@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'name field can not be empty!'],
-    minLength: [3, 'name field can not be less than 3 characters!'],
     maxLength: [10, 'name field can not be more than 10 characters!'],
     trim: true,
   },
@@ -38,7 +37,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'lastName',
     required: [true, 'last name field can not be empty!'],
-    minLength: [3, 'last name field can not be less than 3 characters!'],
     maxLength: [10, 'last name field can not be more than 10 characters!'],
     trim: true,
   },
@@ -55,6 +53,14 @@ const userSchema = new mongoose.Schema({
       message: 'job status is either (user) or (admin)!',
     },
     default: 'user',
+  },
+
+  avatar: {
+    type: String,
+  },
+
+  avatarPublicId: {
+    type: String,
   },
 });
 
