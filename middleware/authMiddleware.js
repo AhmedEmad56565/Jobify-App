@@ -15,6 +15,7 @@ export const protect = async (req, res, next) => {
       );
     }
     req.user = userFound;
+    req.testUser = userId === '658387f00988a7a4100d4ebc';
     next();
   } else {
     return next(
@@ -29,4 +30,17 @@ export const admin = (req, res, next) => {
   } else {
     next(new AppError('Not authorized as admin!', StatusCodes.FORBIDDEN));
   }
+};
+
+export const checkTestUsr = (req, res, next) => {
+  if (req.testUser) {
+    return next(
+      new AppError(
+        'You are not allowed to perform this action!',
+        StatusCodes.BAD_REQUEST
+      )
+    );
+  }
+
+  next();
 };

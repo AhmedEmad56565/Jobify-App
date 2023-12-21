@@ -10,14 +10,14 @@ import {
   getMyJobs,
 } from '../controllers/jobController.js';
 import { idJobError } from '../middleware/idErrorMiddleware.js';
-// import { protect, admin } from '../middleware/authMiddleware.js';
+import { checkTestUsr } from '../middleware/authMiddleware.js';
 
-router.route('/').get(getAllJobs).post(createJob);
-router.get('/my-jobs', getMyJobs);
+router.route('/').get(getAllJobs).post(checkTestUsr, createJob);
+router.get('/my-jobs', checkTestUsr, getMyJobs);
 router
   .route('/:id')
   .get(idJobError, getJob)
-  .patch(idJobError, updateJob)
-  .delete(idJobError, deleteJob);
+  .patch(checkTestUsr, idJobError, updateJob)
+  .delete(checkTestUsr, idJobError, deleteJob);
 
 export default router;
