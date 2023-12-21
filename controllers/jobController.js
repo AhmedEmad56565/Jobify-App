@@ -1,6 +1,8 @@
 import Job from '../models/jobModel.js';
 import AppError from '../utils/appError.js';
 import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
+import day from 'dayjs';
 
 // @desc    fetch all jobs
 // @route   GET /api/v1/jobs
@@ -56,4 +58,67 @@ export const deleteJob = async (req, res, next) => {
 export const getMyJobs = async (req, res, next) => {
   const jobs = await Job.find({ createdBy: req.user._id });
   res.status(StatusCodes.OK).json(jobs);
+};
+
+// @desc    get jobs stats
+// @route   GET /api/v1/jobs/stats
+// @access  private
+export const getStats = async (req, res, next) => {
+  let stats = await Job.aggregate([
+    {
+      $match: { createdBy: req.user._id },
+    },
+    {
+      $group: {
+        _id: '$jobStatus',
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  stats = stats.reduce((acc, curr) => {
+    const { _id: title, count } = curr;
+    acc[title] = count;
+    return acc;
+  }, {});
+
+  const defaultStats = {
+    pending: stats.pending || 0,
+    interview: stats.interview || 0,
+    declined: stats.declined || 0,
+  };
+
+  let monthlyApplications = await Job.aggregate([
+    {
+      $match: { createdBy: req.user._id },
+    },
+    {
+      $group: {
+        _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $sort: { '_id.year': -1, '_id.month': -1 },
+    },
+    { $limit: 6 },
+  ]);
+
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+
+      const date = day()
+        .month(month - 1)
+        .year(year)
+        .format('MMM YY');
+
+      return { date, count };
+    })
+    .reverse();
+
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications });
 };
