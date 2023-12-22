@@ -4,7 +4,8 @@ import AppError from '../utils/appError.js';
 import { StatusCodes } from 'http-status-codes';
 import { getResponse } from '../utils/generateToken.js';
 import cloudinary from 'cloudinary';
-import { promises as fs } from 'fs';
+import { formatImage } from '../middleware/multerMiddleware.js';
+// import { promises as fs } from 'fs';
 
 // @desc    get current user
 // @route   GET /api/v1/users/current-user
@@ -47,8 +48,9 @@ export const updateUser = async (req, res, next) => {
     const userData = { name, email, lastName, location };
 
     if (req.file) {
-      const response = await cloudinary.v2.uploader.upload(req.file.path);
-      await fs.unlink(req.file.path);
+      const file = formatImage(req.file);
+      const response = await cloudinary.v2.uploader.upload(file);
+      // await fs.unlink(req.file.path);
       userData.avatar = response.secure_url;
       userData.avatarPublicId = response.public_id;
     }
