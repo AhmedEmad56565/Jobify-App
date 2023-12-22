@@ -1,9 +1,11 @@
 import Job from './Job';
 import Wrapper from '../assets/wrappers/JobsContainer';
 import { useAllJobsContext } from '../hooks/useAllJobsContext';
+import PageBtnContainer from './PageBtnContainer';
 
 const JobsContainer = () => {
-  const { jobs, totalJobs } = useAllJobsContext();
+  const { data } = useAllJobsContext();
+  const { jobs, totalJobs, numOfPages } = data;
 
   if (jobs.length === 0) {
     return (
@@ -15,12 +17,15 @@ const JobsContainer = () => {
 
   return (
     <Wrapper>
-      <h3 style={{ marginBottom: '20px' }}>Found {totalJobs} job</h3>
+      <h5>
+        {totalJobs} job{jobs.length > 1 && 's'} found
+      </h5>
       <div className='jobs'>
         {jobs.map((job) => (
           <Job key={job._id} {...job} />
         ))}
       </div>
+      {numOfPages > 1 && <PageBtnContainer />}
     </Wrapper>
   );
 };

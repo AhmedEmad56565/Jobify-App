@@ -5,7 +5,7 @@ const Wrapper = styled.section`
   margin-top: 2rem;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
   .btn-container {
