@@ -4,10 +4,15 @@ import { toast } from 'react-toastify';
 import { JobsContainer, SearchContainer } from '../components';
 import customFetch from '../utils/customFetch';
 
-export const loader = async () => {
+export const loader = async ({ request }) => {
   try {
-    const { data } = await customFetch('/jobs');
-    return data;
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ]);
+    const { data } = await customFetch('/jobs', {
+      params,
+    });
+    return { data, searchValues: { ...params } };
   } catch (error) {
     toast.error(error?.response?.data?.msg);
     return error;
@@ -15,10 +20,13 @@ export const loader = async () => {
 };
 
 const AllJobs = () => {
-  const jobs = useLoaderData();
+  const {
+    data: { jobs, totalJobs },
+    searchValues,
+  } = useLoaderData();
 
   return (
-    <AllJobsContext.Provider value={jobs}>
+    <AllJobsContext.Provider value={{ jobs, totalJobs, searchValues }}>
       <SearchContainer />
       <JobsContainer />
     </AllJobsContext.Provider>

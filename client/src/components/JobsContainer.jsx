@@ -3,7 +3,7 @@ import Wrapper from '../assets/wrappers/JobsContainer';
 import { useAllJobsContext } from '../hooks/useAllJobsContext';
 
 const JobsContainer = () => {
-  const jobs = useAllJobsContext();
+  const { jobs, totalJobs } = useAllJobsContext();
 
   if (jobs.length === 0) {
     return (
@@ -15,6 +15,7 @@ const JobsContainer = () => {
 
   return (
     <Wrapper>
+      <h3 style={{ marginBottom: '20px' }}>Found {totalJobs} job</h3>
       <div className='jobs'>
         {jobs.map((job) => (
           <Job key={job._id} {...job} />
