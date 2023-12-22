@@ -28,13 +28,12 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
 //MORGAN SETUP
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.resolve(__dirname, './public')));
 
 app.use(cookieParser());
@@ -44,6 +43,10 @@ app.use(express.json());
 app.use('/api/v1/jobs', protect, jobRouter);
 app.use('/api/v1/users', protect, userRouter);
 app.use('/api/v1/auth', authRouter);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './public', 'index.html'));
+});
 
 //ERROR MIDDLEWARE
 app.use('*', notFound);
